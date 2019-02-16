@@ -7,15 +7,10 @@ import java.util.List;
 
 public class AvoidLazyExceptionTest extends EmployerTest {
 
-  /**
-   * Todo Переделайте код теста, чтобы избежать org.hibernate.LazyInitializationException
-   *
-   * https://vladmihalcea.com/the-best-way-to-handle-the-lazyinitializationexception/
-   */
   @Test
   public void shouldAvoidLazyException() {
     List<Employer> employers = doInTransaction(
-      () -> getSession().createQuery("from Employer", Employer.class).list()
+      () -> getSession().createQuery("select e from Employer e join fetch e.vacancies", Employer.class).list()
     );
     assertEquals(1L, getSelectCount());
 
